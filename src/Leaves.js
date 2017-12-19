@@ -19,7 +19,6 @@ class Leaves {
   }
 
   init() {
-    this.x = '1';
     const left = new createjs.Bitmap(preload.getResult('left'));
     const right = new createjs.Bitmap(preload.getResult('right'));
     left.x = 0;

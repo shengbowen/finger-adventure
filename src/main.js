@@ -8,7 +8,7 @@ window.onload = () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const stage = new createjs.Stage();
+  const stage = new createjs.Stage(canvas);
 
   // const queue = new createjs.LoadQueue();
 
