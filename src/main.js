@@ -17,6 +17,10 @@ window.onload = () => {
     const leafCon = leves.init();
     stage.addChild(leafCon);
     stage.update();
+    createjs.Ticker.addEventListener('tick', () => {
+      leves.tranlateY(200);
+      stage.update();
+    });
   }
 
   queue.on('complete', handleComplete);
