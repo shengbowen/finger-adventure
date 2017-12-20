@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 import Leaves from './Leaves';
 import queue from './preload';
+import Floor from './Floor';
 import './assets/reset.css';
 
 window.onload = () => {
@@ -15,10 +16,12 @@ window.onload = () => {
   function handleComplete() {
     const leves = new Leaves({}, canvas);
     const leafCon = leves.init();
-    stage.addChild(leafCon);
+    const floor = new Floor({}, canvas);
+    floor.init();
+    stage.addChild(leafCon, floor.instance);
     stage.update();
     createjs.Ticker.addEventListener('tick', () => {
-      leves.tranlateY(200);
+      leves.tranlateY(50);
       stage.update();
     });
   }
