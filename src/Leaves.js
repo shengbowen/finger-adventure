@@ -27,7 +27,7 @@ class Leaves {
     this.leafCon1.addChild(left, right);
     this.leafHeight = this.leafCon1.getBounds().height;
     this.nextPosY1 = this.leafCon1.y = this.canvas.height - this.leafHeight; // eslint-disable-line
-    this.leafCon2 = this.leafCon1.clone(true);
+    this.leafCon2 = this.leafCon1.clone(true); //  //某些createjs版本这个方法会报 图片找不到的错误
     this.nextPosY2 = this.leafCon2.y = this.leafCon1.y - this.leafHeight; // eslint-disable-line
     this.container = new createjs.Container();
     this.container.addChild(this.leafCon1, this.leafCon2);
@@ -48,7 +48,7 @@ class Leaves {
     } else {
       createjs.Tween.get(this.leafCon1, { override: true })
                     .to({ y: this.nextPosY1 }, 500)
-                    .call(() => this.moving = false);
+                    .call(() => { this.moving = false; });
     }
 
     if (curPosY2 >= threshold) {
@@ -56,7 +56,7 @@ class Leaves {
     } else {
       createjs.Tween.get(this.leafCon2, { override: true })
                     .to({ y: this.nextPosY2 }, 500)
-                    .call(() => this.moving = false);
+                    .call(() => { this.moving = false; });
     }
   }
 }
