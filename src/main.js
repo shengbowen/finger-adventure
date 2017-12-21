@@ -18,6 +18,9 @@ window.onload = () => {
     const leafCon = leves.init();
     const floor = new Floor({}, canvas);
     floor.init();
+    [0, 1, 1, 0, 1, 1, 0].forEach((item) => {
+      floor.addOneFloor(item);
+    });
     stage.addChild(leafCon, floor.instance);
     stage.update();
     createjs.Ticker.addEventListener('tick', () => {

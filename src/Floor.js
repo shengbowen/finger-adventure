@@ -1,4 +1,5 @@
 import preload from './preload';
+import { stairYOffset } from './config';
 
 class Floor {
   constructor(config, canvas) {
@@ -10,6 +11,8 @@ class Floor {
     this.barrierCon = null; // 障碍物容器
     this.stairCon = null; // 阶梯容器
     this.canvas = canvas;
+    this.lastX = 0; // 最新一块阶梯的位置
+    this.lastY = 0;
     Object.assign(this.config, config);
   }
 
@@ -34,14 +37,14 @@ class Floor {
       },
     });
 
-    const stair = new createjs.Sprite(spriteSheet, 'stair');
-    const stairWidth = stair.getBounds().width;
-    const stairHeight = stair.getBounds().height;
+    this.stair = new createjs.Sprite(spriteSheet, 'stair');
+    this.stair.width = this.stair.getBounds().width;
+    this.stair.height = this.stair.getBounds().height;
 
     let barriers = ['wood', 'explosive', 'ice', 'mushroom', 'stone'];
     barriers = barriers.map((item) => {
       const container = new createjs.Container();
-      const st = stair.clone(true);
+      const st = this.stair.clone(true);
       const bar = new createjs.Sprite(spriteSheet, item);
       bar.y = st.y - 60;
       container.addChild(st, bar);
@@ -50,15 +53,29 @@ class Floor {
 
     this.barriers = barriers;
 
-    const firstStair = stair.clone(true);
-    firstStair.x = this.canvas.width / 2 - stairWidth / 2; //eslint-disable-line
-    firstStair.y = this.canvas.height - stairHeight - 300;
+    const firstStair = this.stair.clone(true);
+    firstStair.x = this.canvas.width / 2 - this.stair.width / 2; //eslint-disable-line
+    firstStair.y = this.canvas.height - this.stair.height - 300;//eslint-disable-line
+    this.lastX = firstStair.x;
+    this.lastY = firstStair.y;
     this.stairCon = new createjs.Container();
     this.barrierCon = new createjs.Container();
     this.stairCon.addChild(firstStair);
     this.stairArr.push(firstStair);
     this.instance = new createjs.Container();
     this.instance.addChild(this.stairCon, this.barrierCon);
+  }
+
+  addOneFloor(stairDirection) {
+    stairDirection =  stairDirection ? 1 : -1; // -1 代表前一个阶梯的左边，1右边
+    const stair = this.stair.clone(true);
+    stair.x = this.lastX + stairDirection * this.stair.width / 2; // eslint-disable-line
+    stair.y = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
+    this.stairArr.push(stair);
+    this.stariSequence.push(stairDirection);
+    this.stairCon.addChild(stair);
+    this.lastX = stair.x;
+    this.lastY = stair.y;
   }
 }
 
