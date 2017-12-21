@@ -1,10 +1,11 @@
 import preload from './preload';
 import { stairYOffset } from './config';
+import { getRandom } from './util';
 
 class Floor {
   constructor(config, canvas) {
     this.config = {};
-    this.stariSequence = [];
+    this.stairSequence = [];
     this.barrierSequence = [];
     this.stairArr = [];
     this.barrierArr = [];
@@ -66,6 +67,14 @@ class Floor {
     this.instance.addChild(this.stairCon, this.barrierCon);
   }
 
+  /**
+   *
+   *
+   * @param {number} stairDirection
+   * @param {number} barrierType
+   * @param {boolean} animation
+   * @memberof Floor
+   */
   addOneFloor(stairDirection, barrierType, animation) {
     // -1 代表前一个阶梯的左边，1右边
     stairDirection = stairDirection ? 1 : -1; // eslint-disable-line
@@ -74,7 +83,7 @@ class Floor {
     const nextY = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
     stair.x = nextX;
     this.stairArr.push(stair);
-    this.stariSequence.push(stairDirection);
+    this.stairSequence.push(stairDirection);
     this.barrierSequence.push(barrierType);
     this.stairCon.addChild(stair);
     if (animation) {
@@ -88,7 +97,7 @@ class Floor {
       // 障碍物在阶梯的反方向
       const nextBarrierX = this.lastX + (-1 * stairDirection * this.stair.width / 2) * barrierType; //eslint-disable-line
       const nextBarrierY = this.lastY - (this.stair.height - stairYOffset) * barrierType; //eslint-disable-line
-      const barrier = this.barriers[Math.floor(Math.random() * 5)].clone(true);
+      const barrier = this.barriers[getRandom(0, 5)].clone(true);
       barrier.x = nextBarrierX;
       this.barrierCon.addChild(barrier);
       if (animation) {
@@ -101,6 +110,12 @@ class Floor {
 
     this.lastX = nextX;
     this.lastY = nextY;
+  }
+
+  addFloors(stairSequence, barrierSequence) {
+    stairSequence.forEach((item, index) => {
+      this.addOneFloor(item, barrierSequence[index], false); // 批量添加无动画
+    });
   }
 }
 

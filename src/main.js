@@ -18,7 +18,7 @@ window.onload = () => {
     const leafCon = leves.init();
     const floor = new Floor({}, canvas);
     floor.init();
-
+    floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
     stage.addChild(leafCon, floor.instance);
     stage.update();
     createjs.Ticker.setFPS(10);
