@@ -24,3 +24,6 @@ p {
 .clearfix:after, .clearfix:before {content: "";display: table;height: 0px;clear: both;visibility: hidden;}
 .clearfix{ *zoom:1; }
 
+canvas {
+  width: 100%;
+}

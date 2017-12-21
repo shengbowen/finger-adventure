@@ -6,8 +6,8 @@ import './assets/reset.css';
 
 window.onload = () => {
   const canvas = document.querySelector('#stage');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth * 2;
+  canvas.height = window.innerHeight * 2;
 
   const stage = new createjs.Stage(canvas);
 
