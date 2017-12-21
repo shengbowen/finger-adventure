@@ -66,16 +66,24 @@ class Floor {
     this.instance.addChild(this.stairCon, this.barrierCon);
   }
 
-  addOneFloor(stairDirection) {
+  addOneFloor(stairDirection, animation) {
     stairDirection =  stairDirection ? 1 : -1; // -1 代表前一个阶梯的左边，1右边
     const stair = this.stair.clone(true);
-    stair.x = this.lastX + stairDirection * this.stair.width / 2; // eslint-disable-line
-    stair.y = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
+    const nextX = this.lastX + stairDirection * this.stair.width / 2; // eslint-disable-line
+    const nextY = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
+    stair.x = nextX;
     this.stairArr.push(stair);
     this.stariSequence.push(stairDirection);
     this.stairCon.addChild(stair);
-    this.lastX = stair.x;
-    this.lastY = stair.y;
+    if (animation) {
+      createjs.Tween.get(stair, { override: true })
+                    .to({ y: nextY }, 200);
+    } else {
+      stair.y = nextY;
+    }
+
+    this.lastX = nextX;
+    this.lastY = nextY;
   }
 }
 

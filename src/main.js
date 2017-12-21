@@ -18,12 +18,12 @@ window.onload = () => {
     const leafCon = leves.init();
     const floor = new Floor({}, canvas);
     floor.init();
-    [0, 1, 1, 0, 1, 1, 0].forEach((item) => {
-      floor.addOneFloor(item);
-    });
+
     stage.addChild(leafCon, floor.instance);
     stage.update();
+    createjs.Ticker.setFPS(10);
     createjs.Ticker.addEventListener('tick', () => {
+      // floor.addOneFloor(Math.floor(Math.random() + 1), true);
       leves.tranlateY(50);
       stage.update();
     });
