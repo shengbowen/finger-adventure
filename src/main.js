@@ -23,7 +23,7 @@ window.onload = () => {
     stage.update();
     createjs.Ticker.setFPS(10);
     createjs.Ticker.addEventListener('tick', () => {
-      // floor.addOneFloor(Math.floor(Math.random() + 1), true);
+      // floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
       leves.tranlateY(50);
       stage.update();
     });

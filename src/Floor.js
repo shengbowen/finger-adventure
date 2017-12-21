@@ -66,20 +66,37 @@ class Floor {
     this.instance.addChild(this.stairCon, this.barrierCon);
   }
 
-  addOneFloor(stairDirection, animation) {
-    stairDirection =  stairDirection ? 1 : -1; // -1 代表前一个阶梯的左边，1右边
+  addOneFloor(stairDirection, barrierType, animation) {
+    // -1 代表前一个阶梯的左边，1右边
+    stairDirection = stairDirection ? 1 : -1; // eslint-disable-line
     const stair = this.stair.clone(true);
     const nextX = this.lastX + stairDirection * this.stair.width / 2; // eslint-disable-line
     const nextY = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
     stair.x = nextX;
     this.stairArr.push(stair);
     this.stariSequence.push(stairDirection);
+    this.barrierSequence.push(barrierType);
     this.stairCon.addChild(stair);
     if (animation) {
       createjs.Tween.get(stair, { override: true })
                     .to({ y: nextY }, 200);
     } else {
       stair.y = nextY;
+    }
+
+    if (barrierType !== 0) {
+      // 障碍物在阶梯的反方向
+      const nextBarrierX = this.lastX + (-1 * stairDirection * this.stair.width / 2) * barrierType; //eslint-disable-line
+      const nextBarrierY = this.lastY - (this.stair.height - stairYOffset) * barrierType; //eslint-disable-line
+      const barrier = this.barriers[Math.floor(Math.random() * 5)].clone(true);
+      barrier.x = nextBarrierX;
+      this.barrierCon.addChild(barrier);
+      if (animation) {
+        createjs.Tween.get(barrier, { override: true })
+                      .to({ y: nextBarrierY }, 200);
+      } else {
+        barrier.y = nextBarrierY;
+      }
     }
 
     this.lastX = nextX;
