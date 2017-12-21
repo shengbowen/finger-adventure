@@ -1,6 +1,6 @@
 import preload from './preload';
 import { stairYOffset } from './config';
-import { getRandom } from './util';
+import util from './util';
 
 class Floor {
   constructor(config, canvas) {
@@ -97,7 +97,7 @@ class Floor {
       // 障碍物在阶梯的反方向
       const nextBarrierX = this.lastX + (-1 * stairDirection * this.stair.width / 2) * barrierType; //eslint-disable-line
       const nextBarrierY = this.lastY - (this.stair.height - stairYOffset) * barrierType; //eslint-disable-line
-      const barrier = this.barriers[getRandom(0, 5)].clone(true);
+      const barrier = this.barriers[util.getRandom(0, 5)].clone(true);
       barrier.x = nextBarrierX;
       this.barrierCon.addChild(barrier);
       if (animation) {
