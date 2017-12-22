@@ -116,6 +116,53 @@ class Floor {
     stairSequence.forEach((item, index) => {
       this.addOneFloor(item, barrierSequence[index], false); // 批量添加无动画
     });
+    Floor.sortChildren(this.stairCon);
+    Floor.sortChildren(this.barrierCon);
+  }
+
+  static sortChildren(container) {
+    container.sortChildren((obj1, obj2) => {
+      if (obj1.y > obj2.y) { return 1; }
+      if (obj1.y < obj2.y) { return -1; }
+      return 0;
+    });
+  }
+
+  dropStair(stair) {
+    const stairY = stair.y;
+    if (!createjs.Tween.hasActiveTweens(stairY)) {
+      createjs.Tween.get(stair, { override: true })
+                    .to({ y: stairY + 400 }, 500)
+                    .call(() => {
+                      console.log(this.stairCon.removeChild(stair));
+                      // createjs.Tween.removeAllTweens(stair);
+                    });
+
+      const barrierArr = this.barrierCon.children;
+      const barrLen = barrierArr.length;
+
+      for (let i = 0; i < barrLen; i += 1) {
+        if (barrierArr[i].y >= stairY) {
+          createjs.Tween.get(barrierArr[i], { override: true })
+                        .to({ y: stairY + 400 }, 500)
+                        .call(() => {
+                          this.barrierCon.removeChild(barrierArr[i]);
+                          // createjs.Tween.removeAllTweens(barrierArr[i]);
+                          // override 就可以了， 加这句反而有bug，导致stair的的动画没有执行
+                        });
+        }
+      }
+    }
+  }
+
+  drop() {
+    const stair = this.stairArr.shift();
+
+    stair && this.dropStair(stair); // eslint-disable-line
+
+    while (this.stairArr.length > 9) {
+      this.dropStair(this.stairArr.shift());
+    }
   }
 }
 

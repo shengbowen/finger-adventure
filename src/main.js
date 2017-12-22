@@ -21,12 +21,14 @@ window.onload = () => {
     floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
     stage.addChild(leafCon, floor.instance);
     stage.update();
-    createjs.Ticker.setFPS(10);
+    createjs.Ticker.setFPS(5);
     createjs.Ticker.addEventListener('tick', () => {
-      // floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
+      floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
       leves.tranlateY(50);
       stage.update();
     });
+
+    // setInterval(() => { floor.drop(); }, 1000);
   }
 
   queue.on('complete', handleComplete);
