@@ -32,12 +32,12 @@ class Game {
     this.stairs.lastX = this.stairs.x;
     this.stairs.lastY = this.stairs.y;
     this.floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
-    this.stage.addChild(this.leves.sprite, this.stairs);
+    this.stage.addChild(this.stairs, this.leves.sprite);
     this.stage.update();
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', () => {
       // floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
-      this.leves.tranlateY(50);
+      // this.leves.tranlateY(50);
       this.stage.update();
     });
   }
@@ -60,6 +60,7 @@ class Game {
       direct = -1;
       this.centerFloor(moveXOffset, -1 * moveYOffset);
     }
+    this.leves.tranlateY(-1 * moveYOffset);
     this.checkJump(direct);
   }
 
