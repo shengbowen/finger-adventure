@@ -5,6 +5,18 @@ import Leaves from './Leaves';
 import { moveXOffset, moveYOffset } from './config';
 import util from './util';
 
+createjs.setInterval = (fun, itr) => {
+  const c = new createjs.Container();
+  const a = createjs.Tween.get(c).wait(itr).call(fun);
+  a.loop = true;
+  return a;
+}
+
+createjs.clearInterval = (timer) => {
+  createjs.Tween.removeTweens(timer.target);
+  timer = null;
+}
+
 class Game {
   constructor(options) {
     // this.init();
@@ -13,6 +25,8 @@ class Game {
     }
     Object.assign(this.config, options);
     this.stairIndex = -1; // 记录当前跳到第几层
+    this.autoDropTimer = null;
+    this.clickTimes = 0;
   }
 
   init() {
@@ -71,7 +85,9 @@ class Game {
   handleClick(event) {
     const posX = event.stageX;
     this.stairIndex += 1;
+    this.clickTimes += 1;
     let direct = -1;
+    this.autoDrop();
     if (posX > (this.canvas.width / 2)) {
       this.robot.moveRight();
       direct = 1;
@@ -81,6 +97,7 @@ class Game {
       direct = -1;
       this.centerFloor(moveXOffset, -1 * moveYOffset);
     }
+    this.addStair();
     this.leves.tranlateY(-1 * moveYOffset);
     this.checkJump(direct);
   }
@@ -135,6 +152,24 @@ class Game {
     this.isAndroid && (window.navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate,
     window.navigator.vibrate([100, 30, 100, 30, 100, 200, 200, 30, 200, 30, 200, 200, 100, 30, 100, 30, 100]),
     window.navigator.vibrate(0))
+  }
+
+  addStair() {
+    const stair = util.getRandom(0, 2);
+    const barrier = util.getRandomNumBySepcial(this.config.barrProbabitiy);
+    this.floor.addOneFloor(stair, barrier, true);
+  }
+
+  autoDrop() {
+    if (!this.autoDropTimer) {
+      this.autoDropTimer = createjs.setInterval(() => {
+        this.floor.drop();
+        if (this.clickTimes <= this.floor.dropIndex) {
+          createjs.clearInterval(this.autoDropTimer);
+          this.robot.dropAndDisappear();
+        }
+      }, 1000);
+    }
   }
 }
 

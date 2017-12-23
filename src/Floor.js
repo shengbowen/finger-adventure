@@ -14,6 +14,7 @@ class Floor {
     this.canvas = canvas;
     this.lastX = 0; // 最新一块阶梯的位置
     this.lastY = 0;
+    this.dropIndex = -1;
     Object.assign(this.config, config);
     this.init();
   }
@@ -83,10 +84,12 @@ class Floor {
     const nextX = this.lastX + stairDirection * this.stair.width / 2; // eslint-disable-line
     const nextY = this.lastY - this.stair.height + stairYOffset;//eslint-disable-line
     stair.x = nextX;
+    stair.y = nextY - 100;
     this.stairArr.push(stair);
     this.stairSequence.push(stairDirection);
     this.barrierSequence.push(barrierType);
     this.stairCon.addChild(stair);
+    console.log(stair.y, nextY);
     if (animation) {
       createjs.Tween.get(stair, { override: true })
                     .to({ y: nextY }, 200);
@@ -100,6 +103,7 @@ class Floor {
       const nextBarrierY = this.lastY - (this.stair.height - stairYOffset) * barrierType; //eslint-disable-line
       const barrier = this.barriers[util.getRandom(0, 5)].clone(true);
       barrier.x = nextBarrierX;
+      barrier.y = nextBarrierY - 100;
       this.barrierCon.addChild(barrier);
       if (animation) {
         createjs.Tween.get(barrier, { override: true })
@@ -153,6 +157,7 @@ class Floor {
                         });
         }
       }
+      this.dropIndex += 1;
     }
   }
 
