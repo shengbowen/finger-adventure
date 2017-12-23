@@ -83,6 +83,14 @@ class Robot {
                     visible: false,
                   });
   }
+
+  hitAndDisappear() {
+    createjs.Tween.get(this.sprite, { override: true })
+                  .wait(500)
+                  .set({
+                    visible: false,
+                  });
+  }
 }
 
 export default Robot;

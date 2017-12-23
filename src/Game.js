@@ -88,8 +88,31 @@ class Game {
     if (barrierSequence[this.stairIndex] !== 1) {
       this.robot.dropAndDisappear(direct);
     } else {
-      console.log('hit and disappear');
+      this.shakeStairs();
+      this.robot.hitAndDisappear();
     }
+  }
+
+  shakeStairs() {
+    createjs.Tween.removeTweens(this.stairs),
+    createjs.Tween.get(this.stairs, {
+        override: true
+    }).to({
+        x: this.stairs.x + 5,
+        y: this.stairs.y - 5
+    }, 50, createjs.Ease.getBackInOut(2.5)).to({
+        x: this.stairs.x,
+        y: this.stairs.y
+    }, 50, createjs.Ease.getBackInOut(2.5)).to({
+        x: this.stairs.x + 5,
+        y: this.stairs.y - 5
+    }, 50, createjs.Ease.getBackInOut(2.5)).to({
+        x: this.stairs.x,
+        y: this.stairs.y
+    }, 50, createjs.Ease.getBackInOut(2.5)).pause(),
+    this.isAndroid && (window.navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate,
+    window.navigator.vibrate([100, 30, 100, 30, 100, 200, 200, 30, 200, 30, 200, 200, 100, 30, 100, 30, 100]),
+    window.navigator.vibrate(0))
   }
 }
 
