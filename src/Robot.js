@@ -6,11 +6,12 @@ class Robot {
     this.config = {
       initDirect: -1,
     };
+    Object.assign(this.config, options);
     this.sprite = null;
     this.canvas = canvas;
     this.lastX = 0;
     this.lastY = 0;
-    this.lastDirect = -1;
+    this.lastDirect = this.config.initDirect;
     this.init();
   }
 
@@ -33,6 +34,10 @@ class Robot {
     this.lastX = this.sprite.x;
     this.sprite.y = this.canvas.height - bounds.height - bottomOffset - 40;
     this.lastY = this.sprite.y;
+    if (this.config.initDirect === 1) {
+      this.sprite.scaleX = -1;
+      this.sprite.regX = 145;
+    }
     // this.sprite.scaleX = -1;
   }
 

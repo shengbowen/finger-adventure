@@ -3,10 +3,15 @@ import Floor from './Floor';
 import Robot from './Robot';
 import Leaves from './Leaves';
 import { moveXOffset, moveYOffset } from './config';
+import util from './util';
 
 class Game {
-  constructor() {
+  constructor(options) {
     // this.init();
+    this.config = {
+      initStairs: 8,
+    }
+    Object.assign(this.config, options);
     this.stairIndex = -1; // 记录当前跳到第几层
   }
 
@@ -23,15 +28,31 @@ class Game {
     this.bindEvents();
   }
 
+  getInitialSequence() {
+    const stairSeq = [];
+    const barrSeq = [];
+    for(let i = 0; i < this.config.initStairs; i++) {
+      stairSeq.push(util.getRandom(0, 2));
+      barrSeq.push(util.getRandomNumBySepcial(this.config.barrProbabitiy));
+    }
+    return {
+      stairSeq,
+      barrSeq,
+    }
+  }
+
   handleComplete() {
-    this.leves = new Leaves({}, this.canvas);
-    this.floor = new Floor({}, this.canvas);
-    this.robot = new Robot({}, this.canvas);
+    const seq = this.getInitialSequence();
+    this.leves = new Leaves(this.config, this.canvas);
+    this.floor = new Floor(this.config, this.canvas);
+    this.robot = new Robot({
+      initDirect: seq.stairSeq[0],
+    }, this.canvas);
     this.stairs = new createjs.Container();
     this.stairs.addChild(this.floor.sprite, this.robot.sprite);// robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
     this.stairs.lastX = this.stairs.x;
     this.stairs.lastY = this.stairs.y;
-    this.floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
+    this.floor.addFloors(seq.stairSeq, seq.barrSeq);
     this.stage.addChild(this.stairs, this.leves.sprite);
     this.stage.update();
     createjs.Ticker.setFPS(60);
