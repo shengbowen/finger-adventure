@@ -26,8 +26,9 @@ class Game {
     this.leves = new Leaves({}, this.canvas);
     this.floor = new Floor({}, this.canvas);
     this.robot = new Robot({}, this.canvas);
+    this.floor.sprite.addChild(this.robot.sprite); // robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
     this.floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
-    this.stage.addChild(this.leves.sprite, this.floor.sprite, this.robot.sprite);
+    this.stage.addChild(this.leves.sprite, this.floor.sprite);
     this.stage.update();
     window.robot = this.robot;
     createjs.Ticker.setFPS(60);
