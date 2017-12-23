@@ -65,6 +65,24 @@ class Robot {
     }
     this.move(-1 * moveXOffset, moveYOffset);
   }
+
+  dropAndDisappear(dir) {
+    const posY = this.sprite.y;
+    const posX = this.sprite.x;
+    this.sprite.stop();
+    createjs.Tween.removeTweens(this.sprite);
+    createjs.Tween.get(this.sprite, { override: true })
+                  .to({
+                    x: posX + dir * 2 * moveXOffset,
+                    y: posY + moveYOffset,
+                  }, 240)
+                  .to({
+                    y: this.canvas.height + this.sprite.y,
+                  }, 800)
+                  .set({
+                    visible: false,
+                  });
+  }
 }
 
 export default Robot;

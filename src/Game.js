@@ -7,6 +7,7 @@ import { moveXOffset, moveYOffset } from './config';
 class Game {
   constructor() {
     // this.init();
+    this.stairIndex = -1; // 记录当前跳到第几层
   }
 
   init() {
@@ -26,11 +27,13 @@ class Game {
     this.leves = new Leaves({}, this.canvas);
     this.floor = new Floor({}, this.canvas);
     this.robot = new Robot({}, this.canvas);
-    this.floor.sprite.addChild(this.robot.sprite); // robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
+    this.stairs = new createjs.Container();
+    this.stairs.addChild(this.floor.sprite, this.robot.sprite);// robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
+    this.stairs.lastX = this.stairs.x;
+    this.stairs.lastY = this.stairs.y;
     this.floor.addFloors([0, 1, 1, 0, 1, 1], [0, 1, 2, 0, 1, 3]);
-    this.stage.addChild(this.leves.sprite, this.floor.sprite);
+    this.stage.addChild(this.leves.sprite, this.stairs);
     this.stage.update();
-    window.robot = this.robot;
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', () => {
       // floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
@@ -46,24 +49,47 @@ class Game {
 
   handleClick(event) {
     const posX = event.stageX;
+    this.stairIndex += 1;
+    let direct = -1;
     if (posX > (this.canvas.width / 2)) {
       this.robot.moveRight();
+      direct = 1;
       this.centerFloor(-1 * moveXOffset, -1 * moveYOffset);
     } else {
       this.robot.moveLeft();
+      direct = -1;
       this.centerFloor(moveXOffset, -1 * moveYOffset);
     }
+    this.checkJump(direct);
   }
 
   centerFloor(x, y) {
-    const nextX = this.floor.sprite.x + x;
-    const nextY = this.floor.sprite.y + y;
-    console.log(nextX, nextY);
-    createjs.Tween.get(this.floor.sprite, { override: true })
+    this.stairs.lastX += x;
+    this.stairs.lastY += y;
+
+    createjs.Tween.get(this.stairs, { override: true })
                   .to({
-                    x: nextX,
-                    y: nextY,
+                    x: this.stairs.lastX,
+                    y: this.stairs.lastY,
                   }, 500);
+  }
+
+  checkJump(direct) {
+    const stairSequence = this.floor.stairSequence;
+
+    if (direct !== stairSequence[this.stairIndex]) {
+      this.drop(direct);
+    }
+  }
+
+  drop(direct) {
+    const barrierSequence = this.floor.barrierSequence;
+
+    if (barrierSequence[this.stairIndex] !== 1) {
+      this.robot.dropAndDisappear(direct);
+    } else {
+      console.log('hit and disappear');
+    }
   }
 }
 
