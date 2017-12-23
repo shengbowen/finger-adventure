@@ -13,7 +13,7 @@ class Leaves {
     this.canvas = canvas;
     this.leafCon1 = null; // 树叶背景的容器
     this.leafCon2 = null;
-    this.container = null;
+    this.sprite = null;
     this.leafHeight = 0;
     this.init();
   }
@@ -29,9 +29,8 @@ class Leaves {
     this.nextPosY1 = this.leafCon1.y = this.canvas.height - this.leafHeight; // eslint-disable-line
     this.leafCon2 = this.leafCon1.clone(true); //  //某些createjs版本这个方法会报 图片找不到的错误
     this.nextPosY2 = this.leafCon2.y = this.leafCon1.y - this.leafHeight; // eslint-disable-line
-    this.container = new createjs.Container();
-    this.container.addChild(this.leafCon1, this.leafCon2);
-    return this.container;
+    this.sprite = new createjs.Container();
+    this.sprite.addChild(this.leafCon1, this.leafCon2);
   }
 
   tranlateY(distance) {

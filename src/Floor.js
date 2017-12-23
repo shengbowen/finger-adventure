@@ -64,8 +64,8 @@ class Floor {
     this.barrierCon = new createjs.Container();
     this.stairCon.addChild(firstStair);
     this.stairArr.push(firstStair);
-    this.instance = new createjs.Container();
-    this.instance.addChild(this.stairCon, this.barrierCon);
+    this.sprite = new createjs.Container();
+    this.sprite.addChild(this.stairCon, this.barrierCon);
   }
 
   /**
