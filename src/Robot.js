@@ -1,5 +1,5 @@
 import prelaod from './preload';
-import { bottomOffset } from './config';
+import { bottomOffset, moveXOffset, moveYOffset } from './config';
 
 class Robot {
   constructor(options, canvas) {
@@ -46,6 +46,24 @@ class Robot {
                     x: this.lastX,
                     y: this.lastY,
                   }, 200);
+  }
+
+  moveRight() {
+    if (this.lastDirect !== 1) {
+      this.lastDirect = 1;
+      this.sprite.scaleX = -1;
+      this.sprite.regX = 145;
+    }
+    this.move(moveXOffset, moveYOffset);
+  }
+
+  moveLeft() {
+    if (this.lastDirect !== -1) {
+      this.lastDirect = -1;
+      this.sprite.scaleX = 1;
+      this.sprite.regX = 0;
+    }
+    this.move(-1 * moveXOffset, moveYOffset);
   }
 }
 
