@@ -1,5 +1,5 @@
 import preload from './preload';
-import { stairYOffset } from './config';
+import { stairYOffset, bottomOffset } from './config';
 import util from './util';
 
 class Floor {
@@ -15,6 +15,7 @@ class Floor {
     this.lastX = 0; // 最新一块阶梯的位置
     this.lastY = 0;
     Object.assign(this.config, config);
+    this.init();
   }
 
   init() {
@@ -56,7 +57,7 @@ class Floor {
 
     const firstStair = this.stair.clone(true);
     firstStair.x = this.canvas.width / 2 - this.stair.width / 2; //eslint-disable-line
-    firstStair.y = this.canvas.height - this.stair.height - 300;//eslint-disable-line
+    firstStair.y = this.canvas.height - this.stair.height - bottomOffset;//eslint-disable-line
     this.lastX = firstStair.x;
     this.lastY = firstStair.y;
     this.stairCon = new createjs.Container();
