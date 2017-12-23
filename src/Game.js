@@ -41,16 +41,29 @@ class Game {
 
   bindEvents() {
     this.background.addEventListener('click', this.handleClick.bind(this)); // 必须有元素才会触发，点击空白区域无效
-    //this.stage.addEventListener('click', this.handleClick); // 必须有元素才会触发，点击空白区域无效
+    // this.stage.addEventListener('click', this.handleClick); // 必须有元素才会触发，点击空白区域无效
   }
 
   handleClick(event) {
     const posX = event.stageX;
-    if (posX > (this.canvas.width/2)) {
+    if (posX > (this.canvas.width / 2)) {
       this.robot.moveRight();
+      this.centerFloor(-1 * moveXOffset, -1 * moveYOffset);
     } else {
       this.robot.moveLeft();
+      this.centerFloor(moveXOffset, -1 * moveYOffset);
     }
+  }
+
+  centerFloor(x, y) {
+    const nextX = this.floor.sprite.x + x;
+    const nextY = this.floor.sprite.y + y;
+    console.log(nextX, nextY);
+    createjs.Tween.get(this.floor.sprite, { override: true })
+                  .to({
+                    x: nextX,
+                    y: nextY,
+                  }, 500);
   }
 }
 
