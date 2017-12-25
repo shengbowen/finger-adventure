@@ -10,19 +10,18 @@ createjs.setInterval = (fun, itr) => {
   const a = createjs.Tween.get(c).wait(itr).call(fun);
   a.loop = true;
   return a;
-}
+};
 
 createjs.clearInterval = (timer) => {
   createjs.Tween.removeTweens(timer.target);
-  timer = null;
-}
+};
 
 class Game {
   constructor(options) {
     // this.init();
     this.config = {
       initStairs: 8,
-    }
+    };
     Object.assign(this.config, options);
     this.stairIndex = -1; // 记录当前跳到第几层
     this.autoDropTimer = null;
@@ -45,14 +44,14 @@ class Game {
   getInitialSequence() {
     const stairSeq = [];
     const barrSeq = [];
-    for(let i = 0; i < this.config.initStairs; i++) {
+    for (let i = 0; i < this.config.initStairs; i += 1) {
       stairSeq.push(util.getRandom(0, 2));
       barrSeq.push(util.getRandomNumBySepcial(this.config.barrProbabitiy));
     }
     return {
       stairSeq,
       barrSeq,
-    }
+    };
   }
 
   handleComplete() {
@@ -63,7 +62,8 @@ class Game {
       initDirect: seq.stairSeq[0],
     }, this.canvas);
     this.stairs = new createjs.Container();
-    this.stairs.addChild(this.floor.sprite, this.robot.sprite);// robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
+    this.stairs.addChild(this.floor.sprite, this.robot.sprite);
+    // robot 与阶梯是一体，这样才能在跳跃时保持robot与stair的相对距离
     this.stairs.lastX = this.stairs.x;
     this.stairs.lastY = this.stairs.y;
     this.floor.addFloors(seq.stairSeq, seq.barrSeq);
@@ -133,25 +133,22 @@ class Game {
   }
 
   shakeStairs() {
-    createjs.Tween.removeTweens(this.stairs),
+    createjs.Tween.removeTweens(this.stairs);
     createjs.Tween.get(this.stairs, {
-        override: true
+      override: true,
     }).to({
-        x: this.stairs.x + 5,
-        y: this.stairs.y - 5
+      x: this.stairs.x + 5,
+      y: this.stairs.y - 5,
     }, 50, createjs.Ease.getBackInOut(2.5)).to({
-        x: this.stairs.x,
-        y: this.stairs.y
+      x: this.stairs.x,
+      y: this.stairs.y,
     }, 50, createjs.Ease.getBackInOut(2.5)).to({
-        x: this.stairs.x + 5,
-        y: this.stairs.y - 5
-    }, 50, createjs.Ease.getBackInOut(2.5)).to({
-        x: this.stairs.x,
-        y: this.stairs.y
-    }, 50, createjs.Ease.getBackInOut(2.5)).pause(),
-    this.isAndroid && (window.navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate,
-    window.navigator.vibrate([100, 30, 100, 30, 100, 200, 200, 30, 200, 30, 200, 200, 100, 30, 100, 30, 100]),
-    window.navigator.vibrate(0))
+      x: this.stairs.x + 5,
+      y: this.stairs.y - 5,
+    }, 50, createjs.Ease.getBackInOut(2.5)).to({ // eslint-disable-line
+      x: this.stairs.x,
+      y: this.stairs.y,
+    }, 50, createjs.Ease.getBackInOut(2.5)).pause(); // eslint-disable-line
   }
 
   addStair() {
