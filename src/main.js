@@ -4,17 +4,10 @@ import Game from './Game';
 window.onload = () => {
   const start = document.querySelector('#start');
   const restart = document.querySelector('#restart');
-  const btn_start = document.querySelector('#btn-start');
-  const btn_restart = document.querySelector('#btn-restart');
+  const btn_start = document.querySelector('#btn-start'); // eslint-disable-line
+  const btn_restart = document.querySelector('#btn-restart');// eslint-disable-line
   start.classList.remove('out');
   start.classList.add('in');
-
-  btn_restart.addEventListener('click', (e) => {
-    game.restart();
-    restart.classList.remove('in');
-    restart.classList.add('out');
-    e.stopPropagation();
-  });
 
   const game = new Game({
     initStairs: 8,
@@ -40,5 +33,12 @@ window.onload = () => {
       restart.classList.remove('out');
       restart.classList.add('in');
     },
+  });
+
+  btn_restart.addEventListener('click', (e) => {
+    game.restart();
+    restart.classList.remove('in');
+    restart.classList.add('out');
+    e.stopPropagation();
   });
 };

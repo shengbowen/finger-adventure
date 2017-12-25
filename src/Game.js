@@ -82,7 +82,7 @@ class Game {
     this.stairs.lastY = this.stairs.y;
     this.floor.addFloors(seq.stairSeq, seq.barrSeq);
     this.stage.addChild(this.background, this.stairs, this.leves.sprite);
-      //所有的container 重新 add，才能保证stage clear有效，舞台重新渲染，否则restart后有重复的
+    // 所有的container 重新 add，才能保证stage clear有效，舞台重新渲染，否则restart后有重复的
   }
 
   bindEvents() {
