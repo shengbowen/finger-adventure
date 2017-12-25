@@ -118,6 +118,7 @@ class Game {
 
     if (direct !== stairSequence[this.stairIndex]) {
       this.drop(direct);
+      this.gameOver();
     }
   }
 
@@ -161,12 +162,17 @@ class Game {
     if (!this.autoDropTimer) {
       this.autoDropTimer = createjs.setInterval(() => {
         this.floor.drop();
-        if (this.clickTimes <= this.floor.dropIndex) {
+        if (this.clickTimes === this.floor.dropIndex) {
           createjs.clearInterval(this.autoDropTimer);
-          this.robot.dropAndDisappear();
+          this.robot.dropAndDisappear(0);
+          this.gameOver();
         }
       }, 1000);
     }
+  }
+
+  gameOver() {
+    createjs.clearInterval(this.autoDropTimer);
   }
 }
 
