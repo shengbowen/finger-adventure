@@ -5,7 +5,28 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
     <title>finger-adventure</title>
   </head>
+  <link rel="stylesheet" href="./src/assets/reset.css">
   <body>
+
+    <div class="modal-mask out" id="start">
+      <div class="modal-wrapper">
+        <div class="arrows">
+          <span class="arrow_left"></span>
+          <span class="arrow_right"></span>
+          <span style="display: inline-block; width: 100%"></span>
+        </div>
+        <p>左右点击跳跃，避开障碍物</p>
+        <button id="btn-start">0%</button>
+      </div>
+    </div>
+
+    <div class="modal-mask out" id="restart">
+      <div class="modal-wrapper">
+        <p>游戏结束</p>
+        <button id="btn-restart">restart</button>
+      </div>
+    </div>
+
     <canvas id="stage" width="720" height="1080"></canvas>
     <script src="./src/lib/createjs.min.js"></script>
     <!-- <script src="./src/lib/tweenjs.js"></script> -->

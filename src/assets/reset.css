@@ -27,3 +27,138 @@ p {
 canvas {
   width: 100%;
 }
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: .5s;
+  animation-duration: .5s;
+  -webkit-transition: visibility 1s linear;
+  transition: visibility 1s linear;
+  visibility: visible;
+}
+
+.modal-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 250px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 50px;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.modal-mask.in {
+  -webkit-animation-name: bounceInDown;
+  animation-name: bounceInDown;
+}
+
+.modal-mask.out{
+  -webkit-animation-name: bounceOutUp;
+  animation-name: bounceOutUp;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.modal-wrapper .arrows {
+  text-align: justify;
+}
+
+.modal-wrapper .arrow_left, .modal-wrapper .arrow_right {
+  display: inline-block;
+  width: 60px;
+  height: 50px;
+  background: url('./arrow.png');
+  background-size: cover;
+}
+
+.modal-wrapper .arrow_right {
+  transform: rotate(180deg);
+}
+
+.modal-wrapper p {
+  color: #e9ba12;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#restart p {
+  font-size: 45px;
+  margin-bottom: 20px;
+}
+
+.modal-wrapper #btn-start,.modal-wrapper #btn-restart {
+  width: 150px;
+  height: 60px;
+  margin-top: 60px;
+  border: 1px solid #e9ba12;
+  border-radius: 60px;
+  background: transparent;
+  color: #e9ba12;
+  font-size: 40px;
+}
+
+@keyframes bounceInDown {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(.215,.61,.355,1);
+    /* transition-timing-function: cubic-bezier(.215,.61,.355,1); */
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0,-100%,0);
+    transform: translate3d(0,-100%,0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,25px,0);
+    transform: translate3d(0,25px,0);
+  }
+
+  75% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,-10px,0);
+    transform: translate3d(0,-10px,0);
+  }
+
+  90% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,5px,0);
+    transform: translate3d(0,5px,0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes bounceOutUp {
+  20% {
+    -webkit-transform: translate3d(0,-10px,0);
+    transform: translate3d(0,-10px,0);
+  }
+  40%, 45% {
+    opacity: 1;
+    -webkit-transform: translate3d(0,20px,0);
+    transform: translate3d(0,20px,0);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translate3d(0,-2000px,0);
+    transform: translate3d(0,-2000px,0);
+  }
+}

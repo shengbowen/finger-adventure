@@ -61,6 +61,7 @@ class Floor {
     firstStair.y = this.canvas.height - this.stair.height - bottomOffset;//eslint-disable-line
     this.lastX = firstStair.x;
     this.lastY = firstStair.y;
+
     this.stairCon = new createjs.Container();
     this.barrierCon = new createjs.Container();
     this.stairCon.addChild(firstStair);
@@ -89,7 +90,7 @@ class Floor {
     this.stairSequence.push(stairDirection);
     this.barrierSequence.push(barrierType);
     this.stairCon.addChild(stair);
-    console.log(stair.y, nextY);
+
     if (animation) {
       createjs.Tween.get(stair, { override: true })
                     .to({ y: nextY }, 200);
@@ -139,7 +140,7 @@ class Floor {
       createjs.Tween.get(stair, { override: true })
                     .to({ y: stairY + 400 }, 500)
                     .call(() => {
-                      console.log(this.stairCon.removeChild(stair));
+                      this.stairCon.removeChild(stair);
                       // createjs.Tween.removeAllTweens(stair);
                     });
 

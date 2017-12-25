@@ -21,11 +21,17 @@ class Game {
     // this.init();
     this.config = {
       initStairs: 8,
+      onProgress: () => {},
+      onComplete: () => {},
+      onGameEnd: () => {},
     };
     Object.assign(this.config, options);
     this.stairIndex = -1; // 记录当前跳到第几层
     this.autoDropTimer = null;
     this.clickTimes = 0;
+    this.score = 0;
+    this.isStart = false;
+    this.init();
   }
 
   init() {
@@ -33,12 +39,17 @@ class Game {
     this.canvas.width = window.innerWidth * 2;
     this.canvas.height = window.innerHeight * 2;
     this.stage = new createjs.Stage(this.canvas);
-    this.background = new createjs.Shape();
-    this.background.graphics.beginFill('#001605').drawRect(0, 0, this.canvas.width, this.canvas.height);
-    this.stage.addChild(this.background);
 
-    queue.on('complete', this.handleComplete.bind(this));
-    this.bindEvents();
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener('tick', () => {
+      this.stage.update();
+    });
+
+    queue.on('complete', () => {
+      this.run();
+      this.config.onComplete();
+    });
+    queue.on('fileload', this.config.onProgress);
   }
 
   getInitialSequence() {
@@ -54,7 +65,10 @@ class Game {
     };
   }
 
-  handleComplete() {
+  createGameStage() {
+    this.background = new createjs.Shape();
+    this.background.graphics.beginFill('#001605').drawRect(0, 0, this.canvas.width, this.canvas.height);
+
     const seq = this.getInitialSequence();
     this.leves = new Leaves(this.config, this.canvas);
     this.floor = new Floor(this.config, this.canvas);
@@ -67,14 +81,8 @@ class Game {
     this.stairs.lastX = this.stairs.x;
     this.stairs.lastY = this.stairs.y;
     this.floor.addFloors(seq.stairSeq, seq.barrSeq);
-    this.stage.addChild(this.stairs, this.leves.sprite);
-    this.stage.update();
-    createjs.Ticker.setFPS(60);
-    createjs.Ticker.addEventListener('tick', () => {
-      // floor.addOneFloor(Math.floor(Math.random() + 1), Math.floor(Math.random() * 4), true);
-      // this.leves.tranlateY(50);
-      this.stage.update();
-    });
+    this.stage.addChild(this.background, this.stairs, this.leves.sprite);
+      //所有的container 重新 add，才能保证stage clear有效，舞台重新渲染，否则restart后有重复的
   }
 
   bindEvents() {
@@ -82,24 +90,46 @@ class Game {
     // this.stage.addEventListener('click', this.handleClick); // 必须有元素才会触发，点击空白区域无效
   }
 
+  run() {
+    this.clickTimes = 0;
+    this.score = 0;
+    this.stairIndex = -1;
+    this.autoDropTimer = null;
+    this.createGameStage();
+    this.bindEvents();
+    createjs.Ticker.setPaused(false);
+  }
+
+  start() {
+    this.isStart = true;
+  }
+
+  restart() {
+    this.stage.clear();
+    this.run();
+    this.start();
+  }
+
   handleClick(event) {
-    const posX = event.stageX;
-    this.stairIndex += 1;
-    this.clickTimes += 1;
-    let direct = -1;
-    this.autoDrop();
-    if (posX > (this.canvas.width / 2)) {
-      this.robot.moveRight();
-      direct = 1;
-      this.centerFloor(-1 * moveXOffset, -1 * moveYOffset);
-    } else {
-      this.robot.moveLeft();
-      direct = -1;
-      this.centerFloor(moveXOffset, -1 * moveYOffset);
+    if (this.isStart) {
+      const posX = event.stageX;
+      this.stairIndex += 1;
+      this.clickTimes += 1;
+      let direct = -1;
+      this.autoDrop();
+      if (posX > (this.canvas.width / 2)) {
+        this.robot.moveRight();
+        direct = 1;
+        this.centerFloor(-1 * moveXOffset, -1 * moveYOffset);
+      } else {
+        this.robot.moveLeft();
+        direct = -1;
+        this.centerFloor(moveXOffset, -1 * moveYOffset);
+      }
+      this.addStair();
+      this.leves.tranlateY(-1 * moveYOffset);
+      this.checkJump(direct);
     }
-    this.addStair();
-    this.leves.tranlateY(-1 * moveYOffset);
-    this.checkJump(direct);
   }
 
   centerFloor(x, y) {
@@ -173,6 +203,11 @@ class Game {
 
   gameOver() {
     createjs.clearInterval(this.autoDropTimer);
+    this.isStart = false;
+    this.config.onGameEnd();
+    setTimeout(() => {
+      createjs.Ticker.setPaused(true);
+    }, 1000);
   }
 }
 
