@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import './assets/reset.css';
 import Game from './Game';
 
 window.onload = () => {
