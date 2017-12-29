@@ -1,6 +1,8 @@
 # finger-adventure
 
 > a finger adventure game
+## 文章介绍
+https://segmentfault.com/a/1190000012633633
 
 ## Build Setup
 
